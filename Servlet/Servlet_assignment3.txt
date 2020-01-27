@@ -1,0 +1,104 @@
+
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+public class Servlet1 extends HttpServlet {
+   public void doPost(HttpServletRequest request, HttpServletResponse response){
+     try{
+      response.setContentType("text/html");
+      PrintWriter pwriter = response.getWriter();
+
+      String name = request.getParameter("userName");
+      String password = request.getParameter("userPassword");
+      String email=request.getParameter("usermail");
+      String phoneno = request.getParameter("phone");
+      String DoB = request.getParameter("date");
+      
+      /*pwriter.print("Hello "+name);
+      pwriter.print("Your Password is: "+password);*/
+      HttpSession session=request.getSession();
+      session.setAttribute("uname",name);
+      session.setAttribute("upass",password);
+      session.setAttribute("umail",email);
+      session.setAttribute("uphone",phoneno);
+      session.setAttribute("udate",DoB);
+      pwriter.print("<a href='welcome'>Details</a>");
+      
+      pwriter.close();
+    }catch(Exception exp){
+       System.out.println(exp);
+     }
+  }
+}
+-----------------------------------------------
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+public class Servlet3 extends HttpServlet {
+  public void doGet(HttpServletRequest request, HttpServletResponse response){
+  try{
+      response.setContentType("text/html");
+      PrintWriter pwriter = response.getWriter();
+      HttpSession session=request.getSession(false);
+      String myName=(String)session.getAttribute("uname");
+      String myPass=(String)session.getAttribute("upass");
+      String myMail=(String)session.getAttribute("umail");
+      String myPhone=(String)session.getAttribute("uphone");
+      String myDoB=(String)session.getAttribute("udate");
+      pwriter.print("Name: "+myName+"<br> Password: "+myPass+"<br> E-Mail: "+myMail+"<br> Phone No:"+myPhone+"<br> Date Of Birth:"+myDoB);
+      pwriter.close();
+  }catch(Exception exp){
+      System.out.println(exp);
+   }
+  }
+}
+--------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>SessionAssignment</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <servlet-name>Servlet1</servlet-name>
+    <servlet-class>Servlet1</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Servlet1</servlet-name>
+    <url-pattern>/login</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>Servlet3</servlet-name>
+    <servlet-class>Servlet3</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Servlet3</servlet-name>
+    <url-pattern>/welcome</url-pattern>
+  </servlet-mapping>
+</web-app>
+-----------------------------------
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Registration</title>
+<h1>Register Here</h1>
+</head>
+<body>
+<form action="login" method="post">
+<table>
+  <tr><td>User Name:</td><td><input type="text" name="userName"/></td></tr>
+  <tr><td>Password:</td><td><input type="password" name="userPassword"/></td></tr>
+  <tr><td>E-mail:</td><td><input type="email" name="usermail"/></td></tr>
+  <tr><td>Phone Number:</td><td><input type="text" name="phone"/></td></tr>
+  <tr><td>Date Of Birth:</td><td><input type="text" name="date"/></td></tr>
+  </table>
+  <input type="submit" value="submit"/>
+</form>
+</body>
+</html>

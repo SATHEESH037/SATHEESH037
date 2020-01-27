@@ -1,0 +1,87 @@
+-----Assignment1------
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
+
+//@WebServlet("/AuthServlet")
+public class AuthServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	HashMap<String, String> check = new HashMap<String, String>();
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		check.put("satheesh", "1234");
+		check.put("Reddy", "5678");
+		check.put("lohith", "9123");
+		check.put("siva", "1201");
+		String user = request.getParameter("name");
+		String pass = request.getParameter("pass");
+		response.setContentType("text/html");
+		PrintWriter writer = response.getWriter();
+		int count = 0;
+
+		Iterator<Map.Entry<String, String>> iter = check.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<String, String> entry = iter.next();
+			if (user.equals(entry.getKey()) && pass.equals(entry.getValue())) {
+				
+				count++;
+			}
+		}
+		if (count > 0) {
+			writer.print("<p style=\"color:red; font-size:20px;\">Name/Password Match</p>");
+		} else {
+			writer.print("<p style=\"color:red; font-size:20px;\">Name/Password Does Not Match</p>");
+		}
+		// doGet(request, response);
+	}
+
+}
+---------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>ServletAssignment1</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <servlet-name>Serv1</servlet-name>
+    <servlet-class>AuthServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Serv1</servlet-name>
+    <url-pattern>/index</url-pattern>
+  </servlet-mapping>
+</web-app>
+-----------------------------------------
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+  <form action="index" method="post">
+    Username:<input type="text" name="name"><br>
+    Password:<input type="password" name="pass"><br>
+    <button>login</button>
+  </form>
+
+</body>
+</html>
